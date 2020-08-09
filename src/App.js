@@ -17,6 +17,7 @@ function App() {
     }
     setListMovie([...listMovie, myMovie]);
   };
+  console.log(listMovie);
 
   const removeFromMyList = (myMovie) => {
     setListMovie(

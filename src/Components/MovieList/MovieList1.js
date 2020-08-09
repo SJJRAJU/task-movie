@@ -6,6 +6,8 @@ import GridListTile from "@material-ui/core/GridListTile";
 import MovieCard from "../Card/CardComponent";
 import Button from "@material-ui/core/Button";
 import Filter from "../Filter/Filter";
+import CheckBox from "../CheckBox/Checkbox";
+// import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,20 +18,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MovieList1 = ({ addToMyList }) => {
+const MovieList1 = ({ checkedMovie, addToMyList, checked }) => {
   const [movie, setMovie] = useState([]);
   const [year, setYear] = useState("");
-  const [checkedMovie, setCheckedMovie] = useState([]);
-  let url =
-    "http://www.omdbapi.com/?apikey=32395055&type=movie&s=bad" + "&Y=" + year;
-  const handleAddMovie = (e, movie, checked) => {
-    setCheckedMovie([...checkedMovie]);
-    if (e.target.checked) {
-      console.log("clicked");
-      setCheckedMovie([...checkedMovie, movie]);
-    }
-    console.log([checkedMovie]);
-  };
+
+  let url = `http://www.omdbapi.com/?apikey=32395055&type=movie&s=bad&Y=${year}`;
 
   const handleChange = (event) => {
     const movieYear = event.target.value;
@@ -49,25 +42,26 @@ const MovieList1 = ({ addToMyList }) => {
     }));
     setMovie(allMovie);
   };
+  const addChecked = () => {
+    console.log(checkedMovie);
+  };
 
   useEffect(() => {
     fetchMovies();
-  }, [url]);
+  }, [fetchMovies]);
 
   const classes = useStyles();
 
   return (
     <div>
-      <Filter
-        year={year}
-        handleChange={handleChange}
-        onClicked={handleAddMovie}
-      />
+      <Filter year={year} handleChange={handleChange} />
+      <button onClick={addChecked}>AddMyList</button>
       <GridList cellHeight={500} className={classes.gridList} cols={3}>
         {movie.map((movie) => (
           <GridListTile key={movie.id}>
             <MovieCard movie={movie} addToMyList={addToMyList} />
             <Button onClick={() => addToMyList(movie)}> Add To My List</Button>
+            <CheckBox movie={movie} />
           </GridListTile>
         ))}
       </GridList>
